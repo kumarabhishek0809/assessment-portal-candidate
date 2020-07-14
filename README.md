@@ -19,5 +19,3 @@ npm install
 
 npm install forever -g
 forever start -c "npm start" ./
-
-Ajay
