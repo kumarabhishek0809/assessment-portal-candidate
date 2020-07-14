@@ -1,0 +1,17 @@
+.align_buttons {
+    float: right;
+}
+
+.button_margin {
+    margin: 5px !important;
+}
+
+.toright{
+   float: right;
+  /*  text-align: end; */
+   
+}
+.quiztimer{
+    color: red;
+    font-weight: bold;
+}
