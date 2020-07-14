@@ -13,7 +13,7 @@ nvm install node
 node -e "console.log('Running Node.js ' + process.version)"
 
 
-git clone https://github.com/anandmohansinha/candidate-portal.git
+git clone https://github.com/ajaydixit81/assessment-portal-candidate.git
 npm install
 
 
