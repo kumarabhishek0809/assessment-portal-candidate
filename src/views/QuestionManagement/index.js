@@ -35,14 +35,6 @@ export default function QuestionManagement(props) {
 
     const [queId, setQuesId] = React.useState(0);
 
-    const fontStyle = {
-        color: "white",
-        backgroundColor: "DodgerBlue",
-        padding: "10px",
-        fontFamily: "Arial",
-        font: "30px",
-        margin: "5%"
-    }
 
 
     const next = (event) => {
@@ -242,18 +234,8 @@ const callApi=()=>{
     // }
     return (
         <div>
-            {!isTestSubmitted && isDataLoaded && !questions.length &&
-                <div style={fontStyle}>
-                    There is not any active assignment assigned to you.
-                    Please contact recruiter.
-                </div>
-            }
-            {isTestSubmitted &&
-            <div style={fontStyle}>
-                Your test has been submitted successfully.We wish you good luck.
-                If you are shortlisted our recruiter team will get in touch with you.
-                Thanks.
-            </div>}
+            {!isTestSubmitted && isDataLoaded && !questions.length && <label>There is not any active assignment assigned to you.Please contact recruiter.</label>}
+            {isTestSubmitted && <label>Your test has been submitted successfully.We wish you good luck.If you are shortlisted our recruiter team will get in touch with you.Thanks.</label>}
             {!isTestSubmitted && questions.length > 0 && <GridContainer>
             {/* {questions.length > 0 && <GridContainer> */}
                 <GridItem xs={12} sm={12} md={12}>
