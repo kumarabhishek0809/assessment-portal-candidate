@@ -22,6 +22,7 @@ export default function QuestionManagement(props) {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     const [count, setCount] = React.useState(1);
     const [technology, setTechnology] = React.useState('');
+    const [questionsCount, setQuestionsCount] = React.useState('');
     const [nextDisable, setNextDisable] = React.useState(false);
     const [preDisable, setPrevDisable] = React.useState(true);
     const [value, setValue] = React.useState('');
@@ -60,8 +61,13 @@ export default function QuestionManagement(props) {
         }
         setCount(count - 1)
 
-        setQuesId(questions[count].id);
-
+        if(count == questionsCount){
+            setQuesId(questions[count-1].id);
+            }
+            else{
+                setQuesId(questions[count].id);
+            }
+        
         setNextDisable(false);
         setSelectedIndex(selectedIndex - 1);
 
@@ -168,6 +174,7 @@ const callApi=()=>{
                     setTechnology(res.assessments.technology);
                     setEmail(res.candidate.emailAddress);
                     setAnswer({ "assessmentId": res.assessments.id, "questionAnswerReq": [] });
+                    setQuestionsCount(res.assessments.noOfQuestions);
 
                     setQuesId(res.assessments.questions[0].id);
                     setAssessmentTimer(res.assessments.duration);
