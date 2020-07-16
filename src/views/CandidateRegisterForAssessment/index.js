@@ -54,8 +54,8 @@ function ShowInstructions(props) {
                   TEST DETAILS
                 </div>
                 <div className={style.float_right, style.display_flex}>
-                  <div className={style.float_left, style.header_border}>Total no. of Questions: 10</div>
-                  <div className={style.float_right, style.header_border}>Total Duration: 60mins</div>
+                  <div className={style.float_left, style.header_border}>Total no. of Questions: 25</div>
+                  <div className={style.float_right, style.header_border}>Total Duration: 30mins</div>
                 </div>
               </div>
             </CardHeader>

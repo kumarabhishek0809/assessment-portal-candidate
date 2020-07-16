@@ -53,6 +53,7 @@ export default function QuestionManagement(props) {
         if (answers && answers.questionAnswerReq[selectedIndex + 1] && answers.questionAnswerReq[selectedIndex + 1].optionId) {
             setValue(answers.questionAnswerReq[selectedIndex + 1].optionId);
         }
+       
     };
     const prev = (event) => {
 
@@ -274,16 +275,6 @@ const callApi=()=>{
                         </CardBody>
                     </Card>
                     <div className={styles.align_buttons}>
-                        <Button className={styles.button_margin}
-                            type="button"
-                            variant="contained"
-                            color="secondary"
-                            size="large"
-                            disabled={preDisable}
-                            onClick={() => prev()}
-                        >
-                            Prev
-                  </Button>
                         <Button className={styles.button_margin}
                             type="button"
                             variant="contained"
