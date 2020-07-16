@@ -35,8 +35,43 @@ export default function QuestionManagement(props) {
 
     const [queId, setQuesId] = React.useState(0);
 
+    document.onkeydown = capturekey;    
+    document.onkeypress = capturekey;
+    document.onkeyup = capturekey;
+    function capturekey(e) {
+        e = e || window.event;
+        if(e.code =='F5') {
+            if(window.confirm('Do you want to submit test??')) {
+                submitButton.current.click();
+            } else {
+                e.preventDefault();
+                e.stopPropagation()
+            }
+        }
+    }
 
-
+    // Confirm Pop-up 
+    /* import { confirmAlert } from 'react-confirm-alert'; // Import
+    import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+    function fkey(e){
+        e = e || window.event;
+            if (e.code == 'F5') {
+                confirmAlert({
+                    title: 'Confirm to submit',
+                    message: 'Are you sure to submit test.',
+                    buttons: [
+                      {
+                        label: 'Yes',
+                        onClick: () => submitButton.current.click();
+                      },
+                      {
+                        label: 'No',
+                        onClick: () => alert('Click No')
+                      }
+                    ]
+                });
+            }
+    } */
     const next = (event) => {
         
 
