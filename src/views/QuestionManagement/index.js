@@ -79,16 +79,15 @@ export default function QuestionManagement(props) {
             setNextDisable(true);
         }
         setCount(count + 1);
-
         setQuesId(questions[count].id);
-        console.log(queId);
+        console.log('Next count -> '+count, ' questions[count].id  -> '+questions[count].id);
 
         setPrevDisable(false);
         setSelectedIndex(selectedIndex + 1);
         if (answers && answers.questionAnswerReq[selectedIndex + 1] && answers.questionAnswerReq[selectedIndex + 1].optionId) {
             setValue(answers.questionAnswerReq[selectedIndex + 1].optionId);
         }
-       
+      
     };
     const prev = (event) => {
 
@@ -99,11 +98,11 @@ export default function QuestionManagement(props) {
 
         if(count == questionsCount){
             setQuesId(questions[count-1].id);
-            }
-            else{
-                setQuesId(questions[count].id);
-            }
-        
+        }
+        else{
+            setQuesId(questions[count].id);
+        }
+        console.log('Prev count -> '+count, ' questions[count].id  -> '+questions[count-1].id);
         setNextDisable(false);
         setSelectedIndex(selectedIndex - 1);
 
@@ -141,7 +140,6 @@ export default function QuestionManagement(props) {
                 setValue(answers.questionAnswerReq[selectedIndex - 1].optionId);
             }
         } */
-        
     };
     const submit = ()=>{
         setIsSubmitClicked(true);
@@ -310,6 +308,16 @@ const callApi=()=>{
                         </CardBody>
                     </Card>
                     <div className={styles.align_buttons}>
+                        <Button className={styles.button_margin}
+                            type="button"
+                            variant="contained"
+                            color="secondary"
+                            size="large"
+                            disabled={preDisable}
+                            onClick={() => prev()}
+                        >
+                            Prev
+                  </Button>
                         <Button className={styles.button_margin}
                             type="button"
                             variant="contained"
