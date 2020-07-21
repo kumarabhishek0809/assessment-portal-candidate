@@ -50,44 +50,24 @@ export default function QuestionManagement(props) {
         }
     }
 
-    // Confirm Pop-up 
-    /* import { confirmAlert } from 'react-confirm-alert'; // Import
-    import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
-    function fkey(e){
-        e = e || window.event;
-            if (e.code == 'F5') {
-                confirmAlert({
-                    title: 'Confirm to submit',
-                    message: 'Are you sure to submit test.',
-                    buttons: [
-                      {
-                        label: 'Yes',
-                        onClick: () => submitButton.current.click();
-                      },
-                      {
-                        label: 'No',
-                        onClick: () => alert('Click No')
-                      }
-                    ]
-                });
-            }
-    } */
+    
     const next = (event) => {
         
-
         if (questions.length > 0 && questions.length == count + 1) {
             setNextDisable(true);
         }
+        
         setCount(count + 1);
-        setQuesId(questions[count].id);
-        console.log('Next count -> '+count, ' questions[count].id  -> '+questions[count].id);
-
         setPrevDisable(false);
-        setSelectedIndex(selectedIndex + 1);
-        if (answers && answers.questionAnswerReq[selectedIndex + 1] && answers.questionAnswerReq[selectedIndex + 1].optionId) {
-            setValue(answers.questionAnswerReq[selectedIndex + 1].optionId);
+        const index = selectedIndex + 1
+        setSelectedIndex(index);
+
+        const queIdTemp = questions[index].id
+        setQuesId(queIdTemp);
+        if (answers[queIdTemp]) {
+            setValue(answers[queIdTemp].optionId);
         }
-      
+
     };
     const prev = (event) => {
 
@@ -95,99 +75,68 @@ export default function QuestionManagement(props) {
             setPrevDisable(true);
         }
         setCount(count - 1)
-
-        if(count == questionsCount){
-            setQuesId(questions[count-1].id);
-        }
-        else{
-            setQuesId(questions[count].id);
-        }
-        console.log('Prev count -> '+count, ' questions[count].id  -> '+questions[count-1].id);
         setNextDisable(false);
-        setSelectedIndex(selectedIndex - 1);
+        const index = selectedIndex - 1;
+        setSelectedIndex(index)
 
-        if (answers && answers.questionAnswerReq[selectedIndex - 1] && answers.questionAnswerReq[selectedIndex - 1].optionId) {
-            setValue(answers.questionAnswerReq[selectedIndex - 1].optionId);
+        setNextDisable(false);
+
+        const queIdTemp = questions[index].id
+        setQuesId(queIdTemp);
+        if (answers[queIdTemp]) {
+            setValue(answers[queIdTemp].optionId);
         }
-
-        
-        /* if(answers.questionAnswerReq[selectedIndex - 1] !== undefined){
-           console.log("Undefined");
-            if (questions.length > 0 && count == 2) {
-                setPrevDisable(true);
-            }
-            setCount(count - 1)
-
-            setQuesId(questions[count].id);
-
-            setNextDisable(false);
-            setSelectedIndex(selectedIndex - 1);
-
-            if (answers && answers.questionAnswerReq[selectedIndex - 1] && answers.questionAnswerReq[selectedIndex - 1].optionId) {
-                setValue(answers.questionAnswerReq[selectedIndex - 1].optionId);
-            }
-        }else{
-            if (questions.length > 0 && count == 2) {
-                setPrevDisable(true);
-            }
-            setCount(count - 1)
-
-            setQuesId(questions[count].id);
-
-            setNextDisable(false);
-            setSelectedIndex(selectedIndex - 1);
-            if (answers && answers.questionAnswerReq[selectedIndex - 1] && answers.questionAnswerReq[selectedIndex - 1].optionId) {
-                setValue(answers.questionAnswerReq[selectedIndex - 1].optionId);
-            }
-        } */
     };
-    const submit = ()=>{
+    const submit = () => {
         setIsSubmitClicked(true);
 
+        console.log('answers------',answers);
+
+        const result =  Object.values(answers).reduce((acc, answer) => {
+            acc.push(answer);
+            return acc;
+        },[]);
+
+        result.pop();//Remove last blank array element
+        let tempId = result[result.length-1]; //Extract the assessmentId and store in temp var
+        result.pop(); //Remove assessmentId/last element
+        const tempAnswers = { "assessmentId": tempId, "questionAnswerReq":result}; //Form the Object
+
+        //console.log('...........', result);
+        console.log(tempAnswers);
+
+
         fetch(`${endPoint.serviceEndPoint}submitAssessment?emailId=`+email, {
-        method:'POST',
-        headers:{
-          'Accept':'application/json',
-          'Content-Type':'application/json',
-          'Access-Control-Allow-Origin': 'Origin, X-Requested-With, Content-Type, Accept'
-        },
-        body: JSON.stringify(answers)
-      }).then((res)=>res.json())
-        .then((res) =>{
-            console.log("submitAssessment",res);
-            if(res.dataSubmited){
-                setIsTestSubmitted(true);
-            }
-            
+            method:'POST',
+            headers:{
+              'Accept':'application/json',
+              'Content-Type':'application/json',
+              'Access-Control-Allow-Origin': 'Origin, X-Requested-With, Content-Type, Accept'
+            },
+            body: JSON.stringify(tempAnswers)
+          }).then((res)=>res.json())
+            .then((res) =>{
+                console.log("submitAssessment",res);
+                if(res.dataSubmited){
+                    setIsTestSubmitted(true);
+                }
+                
         })
 
     }
     const handleChange = (event) => {
         
         setValue(event.target.value);
+        const questionId = questions[selectedIndex].id
+        setQuesId(questionId);
 
-        //console.log(selectedIndex,event.target.value);
-
-        let { questionAnswerReq } = answers;
-        let quesAns = {
-            "questionId": queId,
+        answers[questionId] = {
+            "questionId": questionId,
             "optionId": event.target.value,
             "selected":selectedIndex
         }
-        //console.log("Handle Change",quesAns);
-
-        questionAnswerReq.push(quesAns);
-        for (const key in questionAnswerReq) {
-            if (questionAnswerReq.hasOwnProperty(key)) {
-                const element = questionAnswerReq[key];
-                if (questionAnswerReq[key].questionId === quesAns.questionId && questionAnswerReq[key].optionId !== quesAns.optionId) {
-                    questionAnswerReq[key].optionId = quesAns.optionId;
-                    questionAnswerReq.pop();
-                }
-            }
-        }
-
-        //console.log(questionAnswerReq);
+        //console.log('answers =>', answers);
+        setAnswer(answers);
     };
 
     useEffect(() => callApi(), []);
@@ -247,31 +196,22 @@ const callApi=()=>{
         display = document.querySelector('#time');
         startTimer(quizDuration, display);
 
-        //const time = 10000;
-        /* setTimeout(() => {
-            console.log(submitButton);
-            submitButton.current.click();
-        }, time); */
     }
 
     const radioButtonContent = () => {
         return (
             questions[selectedIndex].options.map((option, index) => (
                 <FormControlLabel value={option.id} control={<Radio />} label={option.description} />
-
             ))
         )
     }
 
-    // if(questions.length == 0 || questions[selectedIndex]=='undefined'){
-    //     return "";
-    // }
     return (
         <div>
             {!isTestSubmitted && isDataLoaded && !questions.length && <label>There is not any active assignment assigned to you.Please contact recruiter.</label>}
             {isTestSubmitted && <label>Your test has been submitted successfully.We wish you good luck.If you are shortlisted our recruiter team will get in touch with you.Thanks.</label>}
             {!isTestSubmitted && questions.length > 0 && <GridContainer>
-            {/* {questions.length > 0 && <GridContainer> */}
+
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader color="primary">
@@ -280,12 +220,6 @@ const callApi=()=>{
                                 <span className={styles.toright}>Assessment will end in <span id="time" className={styles.quiztimer}>00:00</span> minutes!</span>
                             </Typography>
                             
-
-                         
-                            {/* <p className={classes.cardCategoryWhite}>
-              Here is a subtitle for this table
-            </p> */}
-
                         </CardHeader>
                         <CardBody>
                             <div>
@@ -296,10 +230,9 @@ const callApi=()=>{
                                     <FormLabel component="legend"></FormLabel>
                                     <RadioGroup aria-label="question" name="question" value={value} onChange={handleChange}>
                                         {
-                                            questions[selectedIndex].options.map((option, index) => (
-                                                <FormControlLabel key={index} checked={option.id == value} value={option.id} control={<Radio />} label={option.description} />
-
-                                            ))
+                                            questions[selectedIndex].options.map((option, index) => 
+                                                (<FormControlLabel key={index} checked={String(option.id) == String(value)} value={option.id} control={<Radio />} label={option.description} />)
+                                            )
                                         }
                                     </RadioGroup>
                                 </FormControl>
