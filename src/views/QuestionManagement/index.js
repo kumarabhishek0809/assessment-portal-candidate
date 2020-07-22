@@ -14,6 +14,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+
+// Logo's On Submit Page
+import red_logo from "assets/img/red.png";
+import green_logo from "assets/img/green.png";
+
 import endPoint from '../../variables/app.url'
 import styles from './QuestionManagement.module.css'
 
@@ -208,9 +213,63 @@ const callApi=()=>{
 
     return (
         <div>
-            {!isTestSubmitted && isDataLoaded && !questions.length && <label>There is not any active assignment assigned to you.Please contact recruiter.</label>}
-            {isTestSubmitted && <label>Your test has been submitted successfully.We wish you good luck.If you are shortlisted our recruiter team will get in touch with you.Thanks.</label>}
-            {!isTestSubmitted && questions.length > 0 && <GridContainer>
+            {!isTestSubmitted && isDataLoaded && !questions.length &&
+            <GridItem xs={12} sm={12} md={12} style={{alignItems: 'center' }}>
+                <Card>
+                    <CardHeader color="primary">
+                        <Typography variant="h6">
+                            <span> 
+                                No Active Assignment...
+                            </span>
+                        </Typography>
+                    </CardHeader>
+                    <CardBody>
+                        <div style={{textAlign: 'center', padding: "50px" }}>
+                            <FormControl component="fieldset">
+                                    <FormLabel component="legend">
+                                        <div>
+                                            <img src={red_logo} style={{width : '5%' }} />
+                                        </div><br/>
+                                        <p style={{color : '#AAAAAA', lineHeight: "2" }}>                                   
+                                            There is not any active assignment assigned to you. <br/>
+                                            Please contact recruiter.
+                                        </p>
+                                    </FormLabel>                                    
+                            </FormControl>
+                        </div>
+                    </CardBody>
+                </Card>
+            </GridItem>}
+            {isTestSubmitted && 
+            <GridItem xs={12} sm={12} md={12}>
+            <Card>
+                <CardHeader color="primary">
+                    <Typography variant="h6">
+                        <span>
+                            Test Submitted Successfully !!!
+                        </span>
+                    </Typography>
+                </CardHeader>
+                <CardBody>
+                    <div style={{textAlign: 'center', padding: "50px" }}>
+                        <FormControl component="fieldset">
+                            <FormLabel component="legend">
+                            <div>
+                                <img src={green_logo} style={{width : '5%' }} />
+                            </div><br/>
+                            <p style={{color : '#AAAAAA',  lineHeight: "2" }}> 
+                              Your test has been submitted successfully.<br/> 
+                              We wish you good luck. <br/>
+                              If you are shortlisted our recruiter team will get in touch with you. <br/>
+                              Thanks.
+                            </p>
+                            </FormLabel>                                    
+                      </FormControl>
+                   </div>
+                </CardBody>
+            </Card>
+        </GridItem>}
+           {!isTestSubmitted && questions.length > 0 && <GridContainer>
 
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
